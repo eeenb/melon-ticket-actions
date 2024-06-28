@@ -1,25 +1,31 @@
-name: workflow
-on: push
+name: Check Tickets
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  job:
+  check-tickets:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+
     steps:
-      - uses: actions/checkout@v1
-      - name: Prepare
-        run: npm ci
-      - name: Lint
-        uses: mooyoul/tslint-actions@master
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: '*.ts'
-      - name: Build
-        run: npm run build
-      - name: Check Tickets
-        run: |
-          export INPUT_PRODUCT_ID="210031"
-          export INPUT_SCHEDULE_ID="100002"
-          export INPUT_SEAT_ID="10008"
-          export INPUT_MESSAGE="抢票"
-          export SLACK_INCOMING_WEBHOOK_URL="${{ secrets.SLACK_WEBHOOK_URL }}"
-          node /home/eee/IdeaProjects/melon-ticket-actions/index.js
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ticket check
+        env:
+          INPUT_PRODUCT_ID: 210031
+          INPUT_SCHEDULE_ID: 100002
+          INPUT_SEAT_ID: 10008
+          INPUT_MESSAGE: 抢票
+          INPUT_SLACK_INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: node index.js
