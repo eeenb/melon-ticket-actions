@@ -15,8 +15,11 @@ jobs:
           pattern: '*.ts'
       - name: Build
         run: npm run build
-      - name: Publish
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: npx semantic-release
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Check Tickets
+        run: |
+          export INPUT_PRODUCT_ID="210031"
+          export INPUT_SCHEDULE_ID="100002"
+          export INPUT_SEAT_ID="10008"
+          export INPUT_MESSAGE="抢票"
+          export SLACK_INCOMING_WEBHOOK_URL="${{ secrets.SLACK_WEBHOOK_URL }}"
+          node /home/eee/IdeaProjects/melon-ticket-actions/index.js
