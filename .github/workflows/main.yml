@@ -9,22 +9,14 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v1
-      - name: Prepare
-        run: npm ci
-      - name: Lint
-        uses: mooyoul/tslint-actions@master
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: '*.ts'
-      - name: Build
-        run: npm run build
-      - name: Publish
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: npx semantic-release
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          node-version: '18'
+      - name: Install dependencies
+        run: npm ci
       - name: Check Tickets
-        run: node /home/eee/IdeaProjects/melon-ticket-actions1/index.js
+        run: node index.js
         env:
           INPUT_PRODUCT_ID: "210031"
           INPUT_SCHEDULE_ID: "100002"
