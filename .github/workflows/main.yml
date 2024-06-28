@@ -1,31 +1,33 @@
 name: Check Tickets
-
 on:
-  push:
-    branches:
-      - main
-
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *' # Every 5 minutes
 jobs:
-  check-tickets:
+  job:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 5
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v1
+      - name: Prepare
+        run: npm ci
+      - name: Lint
+        uses: mooyoul/tslint-actions@master
         with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run ticket check
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: '*.ts'
+      - name: Build
+        run: npm run build
+      - name: Publish
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx semantic-release
         env:
-          INPUT_PRODUCT_ID: 210031
-          INPUT_SCHEDULE_ID: 100002
-          INPUT_SEAT_ID: 10008
-          INPUT_MESSAGE: 抢票
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Check Tickets
+        run: node /home/eee/IdeaProjects/melon-ticket-actions1/index.js
+        env:
+          INPUT_PRODUCT_ID: "210031"
+          INPUT_SCHEDULE_ID: "100002"
+          INPUT_SEAT_ID: "10008"
+          INPUT_MESSAGE: "抢票"
           INPUT_SLACK_INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: node index.js
