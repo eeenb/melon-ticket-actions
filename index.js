@@ -23,8 +23,8 @@ const qs = require("querystring");
         "Content-Type": "application/x-www-form-urlencoded",
         "Accept": "application/json, text/plain, */*",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-        "Referer": "https://tkglobal.melon.com",
-        "Origin": "https://tkglobal.melon.com",
+        "Referer": "https://ticket.melon.com",
+        "Origin": "https://ticket.melon.com",
       },
       data: qs.stringify({
         prodId: productId,
@@ -38,7 +38,7 @@ const qs = require("querystring");
     console.log("Got response:", res.data);
 
     if (res.data && res.data.chkResult) {
-      const link = `http://tkglobal.melon.com/performance/index.htm?${qs.stringify({
+      const link = `http://ticket.melon.com/performance/index.htm?${qs.stringify({
         prodId: productId,
       })}`;
       console.log(`${message} ${link}`);
