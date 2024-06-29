@@ -15,7 +15,6 @@ const qs = require("querystring");
       throw new Error("Please set all required inputs");
     }
 
-    const cookies = "_fwb=1466SLrmDtd8MJRxEDWnDKH.1719522226874; i18next=EN; JSESSIONID=9A94D015C1C8D677587A6C2157851FD4; keyCookie_T=1000668715; MAC_T=\"0ALghgN7G/6eQT/BL8mMULtqz+sgOksZwd44tuHUk9ethjBRkZPdMRLmjx4SraVseOONj3Bwbig3nsq/eq1AVA==\"; NetFunnel_ID=WP15; PC_PCID=17195219381610992302781; PCID=17195219381610992302781; TKT_POC_ID=TKT_POC_ID; wcs_bt=wcs_bt";
 
     const res = await axios({
       method: "POST",
@@ -26,7 +25,6 @@ const qs = require("querystring");
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
         "Referer": "https://tkglobal.melon.com",
         "Origin": "https://tkglobal.melon.com",
-        "Cookie": cookies
       },
       data: qs.stringify({
         prodId: productId,
